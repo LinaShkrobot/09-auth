@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import useAuthStore from "@/lib/store/authStore";
-import { checkSession } from "@/lib/api/clientApi";
+import { checkSession, getMe } from "@/lib/api/clientApi";
 
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
@@ -17,8 +17,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     const verifySession = async () => {
       try {
-        const user = await checkSession();
-        if (user) {
+        const isSessionActive = await checkSession();
+
+        if (isSessionActive) {
+          const user = await getMe();
           setUser(user);
         } else {
           clearIsAuthenticated();

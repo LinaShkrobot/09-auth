@@ -2,7 +2,6 @@ import api from "./api";
 import { Note } from "@/types/note";
 import { User } from "@/types/user";
 
-// Interfaces
 interface NotesResponse {
   notes: Note[];
   totalPages: number;
@@ -35,7 +34,6 @@ interface UpdateUserPayload {
   username?: string;
 }
 
-// Notes API
 export async function fetchNotes({
   search,
   tag,
@@ -68,7 +66,6 @@ export async function deleteNote(noteId: string): Promise<Note> {
   return response.data;
 }
 
-// Auth API
 export async function register(payload: RegisterPayload): Promise<User> {
   const response = await api.post<User>("/auth/register", payload);
   return response.data;
@@ -83,12 +80,15 @@ export async function logout(): Promise<void> {
   await api.post("/auth/logout");
 }
 
-export async function checkSession(): Promise<User | null> {
-  const response = await api.get<User>("/auth/session");
-  return response.data || null;
+export async function checkSession(): Promise<boolean> {
+  try {
+    const response = await api.get<{ success: boolean }>("/auth/session");
+    return response.data.success;
+  } catch (error) {
+    return false;
+  }
 }
 
-// User API
 export async function getMe(): Promise<User> {
   const response = await api.get<User>("/users/me");
   return response.data;

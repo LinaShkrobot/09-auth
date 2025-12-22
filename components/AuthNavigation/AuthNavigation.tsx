@@ -10,8 +10,6 @@ const AuthNavigation = () => {
   const router = useRouter();
   const { isAuthenticated, user, clearIsAuthenticated } = useAuthStore();
 
-  console.log(isAuthenticated, user);
-
   const handleLogout = async () => {
     try {
       await logout();

@@ -6,22 +6,22 @@ const authRoutes = ["/sign-in", "/sign-up"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get("connect.sid");
+  const accessToken = request.cookies.get("accessToken");
+  const refreshToken = request.cookies.get("refreshToken");
+  const hasToken = accessToken || refreshToken;
 
   const isPrivateRoute = privateRoutes.some((route) =>
     pathname.startsWith(route)
   );
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
-  // Якщо це приватний маршрут і немає токена - редірект на логін
-  if (isPrivateRoute && !token) {
+  if (isPrivateRoute && !hasToken) {
     const url = request.nextUrl.clone();
     url.pathname = "/sign-in";
     return NextResponse.redirect(url);
   }
 
-  // Якщо це публічний маршрут авторизації і є токен - редірект на профіль
-  if (isAuthRoute && token) {
+  if (isAuthRoute && hasToken) {
     const url = request.nextUrl.clone();
     url.pathname = "/profile";
     return NextResponse.redirect(url);
