@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote, CreateNotePayload } from "@/lib/api";
+import { createNote, CreateNotePayload } from "@/lib/api/clientApi";
 import { toast } from "react-hot-toast";
 import useNoteStore from "@/lib/store/noteStore";
 import css from "./NoteForm.module.css";
