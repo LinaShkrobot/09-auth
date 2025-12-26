@@ -80,13 +80,9 @@ export async function logout(): Promise<void> {
   await api.post("/auth/logout");
 }
 
-export async function checkSession(): Promise<boolean> {
-  try {
-    const response = await api.get<{ success: boolean }>("/auth/session");
-    return response.data.success;
-  } catch (error) {
-    return false;
-  }
+export async function checkSession() {
+  const response = await api.get<{ success: boolean }>("/auth/session");
+  return response;
 }
 
 export async function getMe(): Promise<User> {

@@ -41,7 +41,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
             onPageChange={setPage}
           />
         )}
-        <Link href="/notes/action/create">Create note +</Link>
+        <Link href="/notes/action/create" prefetch={false}>Create note +</Link>
       </header>
 
       <h1>Notes List</h1>

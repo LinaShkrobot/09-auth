@@ -8,7 +8,11 @@ import { checkSession, getMe } from "@/lib/api/clientApi";
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const { setUser, clearIsAuthenticated, isAuthenticated } = useAuthStore();
@@ -17,9 +21,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     const verifySession = async () => {
       try {
-        const isSessionActive = await checkSession();
+        const { data } = await checkSession();
 
-        if (isSessionActive) {
+        if (data.success) {
           const user = await getMe();
           setUser(user);
         } else {
@@ -50,13 +54,22 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   if (loading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
         Loading...
       </div>
     );
   }
 
-  const isPrivateRoute = privateRoutes.some((route) => pathname.startsWith(route));
+  const isPrivateRoute = privateRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
   if (isPrivateRoute && !isAuthenticated) {
     return null;

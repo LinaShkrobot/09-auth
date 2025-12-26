@@ -1,49 +1,23 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getMe } from "@/lib/api/clientApi";
-import useAuthStore from "@/lib/store/authStore";
+import { getMe } from "@/lib/api/serverApi";
+import type { Metadata } from "next";
 import css from "./page.module.css";
 
-export default function ProfilePage() {
-  const { user, setUser } = useAuthStore();
-  const [loading, setLoading] = useState(true);
+export const metadata: Metadata = {
+  title: "Profile",
+  description: "User profile page",
+};
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await getMe();
-        setUser(userData);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (!user) {
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-  }, [user, setUser]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return <div>User not found</div>;
-  }
+export default async function ProfilePage() {
+  const user = await getMe();
 
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <div className={css.header}>
           <h1 className={css.formTitle}>Profile Page</h1>
-          <Link href="/profile/edit" className={css.editProfileButton}>
+          <Link href="/profile/edit" className={css.editProfileButton} prefetch={false}>
             Edit Profile
           </Link>
         </div>
